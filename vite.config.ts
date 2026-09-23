@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: 'https://github.com/t4magoro/Birthday-app.git',
+  base: '/Birthday-app/',
   plugins: [
     react(),
     tailwindcss(),
