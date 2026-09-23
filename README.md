@@ -1,5 +1,5 @@
 # 💖 Personalized Interactive Birthday Web App 💖
-Dear my beloved girl  this is my first time learning front end web developement and i wish to present my first project to my you, i hope you can see my effort later in the future, but for now this is all i can do, i hope in the future i can develop my skill even further and contribute my skill to the society but for now, i present to you this project from all of my heart 
+Dear my beloved girl  this is my first time learning front end web developement and i wish to present my first project to you, i hope you can see my effort later in the future, but for now this is all i can do, i hope in the future i can develop my skill even further and contribute my skill to the society, but for now, i present to you this project from all of my heart 
 
 ---
 
@@ -46,7 +46,7 @@ Open your browser and navigate to:
 http://localhost:5173/
 ```
 
-to close it when ur done
+to close it when you are done
 
 ```bash
 docker-compose down
