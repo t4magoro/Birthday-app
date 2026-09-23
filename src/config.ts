@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { Film, Coffee, Heart, Utensils, CheckCircle2, Gift } from 'lucide-react';
 
+
+import img1 from './assets/1.jpeg';
+import img2 from './assets/2.jpeg';
+import img3 from './assets/3.jpeg';
+
+
 export const CONFIG = {
   HER_NAME: "Hera kesayangan iqbal",
   
@@ -11,18 +17,9 @@ export const CONFIG = {
   together! I love you! ❤️`,
   
 PHOTOS: [
-    {
-      url: "./src/assets/1.jpeg", 
-      caption: "SO BYUTIPULL 🥰"
-    },
-    {
-      url: "./src/assets/2.jpeg",
-      caption: "SO KYUTTTTT ☀️"
-    },
-    {
-      url: "./src/assets/3.jpeg",
-      caption: "anjay harusnya best couple sih ini 🍦"
-    }
+    { url: img1, caption: "SO BYUTIPULL 🥰" },
+    { url: img2, caption: "SO KYUTTTTT ☀️" },
+    { url: img3, caption: "anjay harusnya best couple sih ini 🍦" }
   ],
 
   QUIZ_QUESTIONS: [
