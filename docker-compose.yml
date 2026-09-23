@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  vite-app:
+    build: .
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      # Tells Vite's file watcher to use polling for Docker volumes
+      - CHOKIDAR_USEPOLLING=true
