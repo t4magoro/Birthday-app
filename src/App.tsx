@@ -69,7 +69,7 @@ export default function App() {
           onClick={() => setShowStoryModal(true)}
           className="fixed bottom-6 right-6 bg-pink-500 text-white px-6 py-4 rounded-full shadow-2xl hover:bg-pink-600 hover:scale-105 transition-all z-50 flex items-center gap-2 font-bold font-serif active:scale-95 border-2 border-pink-400 animate-pop-in"
           >
-          <Sparkles className="w-5 h-5 animate-pulse" /> Design IG Story
+          <Sparkles className="w-5 h-5 animate-pulse" /> Design Birthday stories
         </button>
       )}
 
