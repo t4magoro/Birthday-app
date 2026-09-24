@@ -6,7 +6,22 @@ import img1 from './assets/1.jpeg';
 import img2 from './assets/2.jpeg';
 import img3 from './assets/3.jpeg';
 import img4 from './assets/4.jpeg';
+import img5 from './assets/5.jpeg';
+import img6 from './assets/6.jpeg';
+import img7 from './assets/7.jpeg';
 
+const rawPhotos = [
+  { url: img1, caption: "SO BYUTIPULL 🥰" },
+  { url: img2, caption: "SO KYUTTTTT ☀️" },
+  { url: img3, caption: "anjay harusnya best couple sih ini 🍦" },
+  { url: img4, caption: "Ini salah satu foto favorit aku sihh wkwkw" },
+  { url: img5, caption: "BIDADARI INI" },
+  { url: img6, caption: "Cute couple 🍦" },
+  { url: img7, caption: "GABISA BERKATA-KATA" }
+];
+
+const fallbackColors = ['bg-pink-300', 'bg-rose-300', 'bg-pink-400', 'bg-fuchsia-300', 'bg-rose-300', 'bg-pink-400', 'bg-fuchsia-300'];
+const angles = [-2, 3, -1, 2, -3, 1,2, -3, 1];
 
 export const CONFIG = {
   HER_NAME: "Hera",
@@ -16,13 +31,14 @@ export const CONFIG = {
   the quiet moments, and the endless love we share. I hope your day is as 
   beautiful, sweet, and amazing as you are. Here's to many more birthdays 
   together! I love you! ❤️`,
+
+  PHOTOS: rawPhotos.map((photo, index) => ({
+    ...photo,
+    id: index,
+    fallback: fallbackColors[index % fallbackColors.length],
+    angle: angles[index % angles.length]
+  })),
   
-PHOTOS: [
-    { url: img1, caption: "SO BYUTIPULL 🥰" },
-    { url: img2, caption: "SO KYUTTTTT ☀️" },
-    { url: img3, caption: "anjay harusnya best couple sih ini 🍦" },
-    { url: img4, caption: "Ini salah satu foto favorit aku sihh wkwkw" }
-  ],
 
   QUIZ_QUESTIONS: [
     {

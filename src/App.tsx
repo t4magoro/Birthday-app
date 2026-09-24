@@ -10,6 +10,7 @@ import { Wishes } from './components/Wishes';
 import { KeepsakePDF } from './components/KeepsakePDF';
 import { BackgroundHeart } from './components/BackgroundHeart';
 import { BackgroundDust } from './components/BackgroundDust';
+import { ConfettiButton } from './components/ConfettiButton';
 
 export default function App() {
   const [prizesUnlocked, setPrizesUnlocked] = useState(false);
@@ -60,6 +61,8 @@ export default function App() {
           <p className="text-sm mt-2 opacity-75">Happy Birthday!</p>
         </footer>
 
+        <ConfettiButton /> 
+        
         {/* Floating Action Button for PDF */}
         {showPrintButton && (
           <button 
