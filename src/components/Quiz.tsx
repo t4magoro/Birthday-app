@@ -88,7 +88,7 @@ export const Quiz = ({ onUnlock }: QuizProps) => {
               {isAnswered && (
                 <button
                   onClick={handleNext}
-                  className="flex items-center gap-2 bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-full font-bold transition-transform hover:scale-105 active:scale-95 shadow-md"
+                  className="flex items-center gap-2 bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-full font-bold transition-transform hover:scale-105 active:scale-95 shadow-md fade-in animate-in fade-in zoom-in duration-500"
                 >
                   {currentQuestionIndex === CONFIG.QUIZ_QUESTIONS.length - 1 ? 'See Results' : 'Next Question'}
                   <ArrowRight className="w-5 h-5" />
