@@ -11,8 +11,7 @@ import { KeepsakePDF } from './components/KeepsakePDF';
 import { BackgroundHeart } from './components/BackgroundHeart';
 import { BackgroundDust } from './components/BackgroundDust';
 import { ConfettiButton } from './components/ConfettiButton';
-import { StoryBuilder } from './components/StoryBuilder';
-
+import { StoryBuilder } from './components/storybuilder';
 export default function App() {
   const [prizesUnlocked, setPrizesUnlocked] = useState(false);
   
