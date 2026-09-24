@@ -1,5 +1,5 @@
 # 💖 Personalized Interactive Birthday Web App 💖
-Dear my beloved girl  this is my first time learning front end web developement and i wish to present my first project to my beloved girl, i hope u can see my effort later in the future, but for now this is all i can do, i hope in the future i can develop my skill even further and contribute my skill to the society but for now, i give this project from all of my heart 
+Dear my beloved girl  this is my first time learning front end web developement and i wish to present my first project to you, i hope you can see my effort later in the future, but for now this is all i can do, i hope in the future i can develop my skill even further and contribute my skill to the society, but for now, i present to you this project from all of my heart 
 
 ---
 
@@ -46,10 +46,13 @@ Open your browser and navigate to:
 http://localhost:5173/
 ```
 
+to close it when you are done
+
 ```bash
 docker-compose down
 ```
 
+---
 
 ## Project Structure
 
@@ -78,6 +81,9 @@ Birthday-app/
 ├── package.json                # Dependencies and scripts
 └── vite.config.ts              # Vite config with GitHub Pages base path
 ```
+
+---
+
 ## Customization Guide (src/config.ts)
 
 Personalize names, text, and photos directly in :src/config.ts
@@ -100,6 +106,8 @@ export const CONFIG = {
   ]
 };
 ```
+
+---
 
 ## Adjusting Coupon Selection Limits (src/components/LoveCoupons.tsx)
 
