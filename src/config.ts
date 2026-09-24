@@ -5,10 +5,11 @@ import { Film, Coffee, Heart, Utensils, CheckCircle2, Gift } from 'lucide-react'
 import img1 from './assets/1.jpeg';
 import img2 from './assets/2.jpeg';
 import img3 from './assets/3.jpeg';
+import img4 from './assets/4.jpeg';
 
 
 export const CONFIG = {
-  HER_NAME: "Hera kesayangan iqbal",
+  HER_NAME: "Hera",
   
   MESSAGE_TEXT: `Happy Birthday to my favorite person in the world! 
   Every day with you is an adventure, and I am so grateful for all the laughs, 
@@ -19,7 +20,8 @@ export const CONFIG = {
 PHOTOS: [
     { url: img1, caption: "SO BYUTIPULL 🥰" },
     { url: img2, caption: "SO KYUTTTTT ☀️" },
-    { url: img3, caption: "anjay harusnya best couple sih ini 🍦" }
+    { url: img3, caption: "anjay harusnya best couple sih ini 🍦" },
+    { url: img4, caption: "Ini salah satu foto favorit aku sihh wkwkw" }
   ],
 
   QUIZ_QUESTIONS: [
