@@ -141,34 +141,19 @@ const exportStory = async () => {
     setIsExporting(true);
     
     try {
-      // 🔥 FIX 1: Force Safari to bypass its broken caching system
-      const baseOptions = {
+      // The canvas does all the work now, so we just take one high-quality shot!
+      const dataUrl = await toJpeg(storyRef.current, {
+        quality: 0.95,
+        pixelRatio: 3, // High resolution for IG Story
         width: 360,
         height: 640,
         style: { transform: 'scale(1)', transformOrigin: 'top left' },
-        cacheBust: true, // Forces fresh rendering
-      };
-
-      // 🔥 FIX 2: The Pre-Warm
-      // Tell Safari to start building the heavy image in the background
-      await toJpeg(storyRef.current, { ...baseOptions, quality: 0.1, pixelRatio: 0.1 });
-
-      // 🔥 FIX 3: THE SAFARI BREATHING ROOM (The Magic Fix)
-      // We literally stop the code for 250 milliseconds. 
-      // This gives Safari's slow engine the exact time it needs to finish decoding 
-      // the Base64 photo into memory before we take the real screenshot!
-      await new Promise(resolve => setTimeout(resolve, 250));
-
-      // 4. The REAL, High-Res Export
-      const dataUrl = await toJpeg(storyRef.current, {
-        ...baseOptions,
-        quality: 0.95,
-        pixelRatio: 3 // High resolution for IG Story
+        cacheBust: true
       });
       
       const link = document.createElement('a');
       link.href = dataUrl;
-      link.download = `Birthday_Story_Design.jpg`;
+      link.download = `Birthday_Story_${CONFIG.HER_NAME || 'Design'}.jpg`;
       link.click();
     } catch (error) {
       console.error("Export failed:", error);

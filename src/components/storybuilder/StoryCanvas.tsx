@@ -1,5 +1,5 @@
-import React from 'react';
 import { CONFIG } from '../../config';
+import React, { useRef, useEffect } from 'react';
 import { StoryColor, StoryTheme, StickerData, LoveDustItem } from './types';
 
 interface StoryCanvasProps {
@@ -12,13 +12,48 @@ interface StoryCanvasProps {
   stickers: StickerData[];
   wishes: string[];
   claimedCoupons: typeof CONFIG.INITIAL_COUPONS;
-  loveDust: LoveDustItem[]; // 🔥 NEW Prop
+  loveDust: LoveDustItem[];
 }
 
 export const StoryCanvas = ({
   containerRef, storyRef, scale, activeColor, activeTheme, 
   uploadedImg, stickers, wishes, claimedCoupons, loveDust
 }: StoryCanvasProps) => {
+
+  // 🔥 THE ULTIMATE iOS FIX: Placed right here before the return statement!
+  const photoCanvasRef = useRef<HTMLCanvasElement>(null);
+  const currentImg = uploadedImg || CONFIG.PHOTOS[0]?.url || '';
+
+  useEffect(() => {
+    const canvas = photoCanvasRef.current;
+    if (!canvas || !currentImg) return;
+    
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    
+    // Only use crossOrigin for external web links, not local uploads
+    if (!currentImg.startsWith('data:')) {
+      img.crossOrigin = 'anonymous';
+    }
+    
+    img.onload = () => {
+      // Set high-res internal dimensions for a perfect 4:5 portrait aspect ratio
+      canvas.width = 800;
+      canvas.height = 1000;
+      
+      // Math to perfectly replicate Tailwind's "object-cover"
+      const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+      const drawWidth = img.width * scale;
+      const drawHeight = img.height * scale;
+      const offsetX = (canvas.width - drawWidth) / 2;
+      const offsetY = (canvas.height - drawHeight) / 2;
+      
+      ctx?.clearRect(0, 0, canvas.width, canvas.height);
+      ctx?.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+    };
+    img.src = currentImg;
+  }, [currentImg]);
+
   return (
     <div className="w-full flex justify-center shrink-0 md:w-[380px] z-10">
       <div className="w-full p-2 md:p-3 rounded-[2rem] border-[3px] border-dashed border-gray-300 bg-white/40 flex justify-center items-center">
@@ -62,20 +97,12 @@ export const StoryCanvas = ({
               <div className={`p-1.5 rounded-3xl border-2 border-dashed border-current ${activeColor.text} transition-colors duration-300`}>
                 <div className={`${activeTheme.frameClass} w-[190px] flex flex-col shrink-0 shadow-lg`}>
                   
-                  {/* 🔥 FIX FOR iOS: Only apply crossOrigin if it is an external config URL */}
-                  {(() => {
-                    const currentImg = uploadedImg || CONFIG.PHOTOS[0]?.url || '';
-                    const isBase64 = currentImg.startsWith('data:');
-                    
-                    return (
-                      <img 
-                        src={currentImg} 
-                        crossOrigin={isBase64 ? undefined : "anonymous"}
-                        alt="Memory"
-                        className="w-full aspect-[4/5] object-cover rounded bg-pink-200"
-                      />
-                    );
-                  })()}
+                  {/* 🔥 FIXED: The canvas now draws the image so Safari doesn't block the export */}
+                  <canvas 
+                    ref={photoCanvasRef}
+                    className="w-full aspect-[4/5] rounded bg-pink-200"
+                    style={{ display: 'block' }}
+                  />
 
                   {activeTheme.id === 'classic' && (
                     <p className="text-center font-serif text-gray-700 italic mt-2 px-1 text-[10px] leading-tight line-clamp-1">
@@ -119,7 +146,7 @@ export const StoryCanvas = ({
               )}
             </div>
 
-            {/* 🔥 FIXED: Changed z-20 to z-[5] so stickers tuck neatly behind the photo and glass cards */}
+            {/* Stickers */}
             {stickers.map(sticker => (
               <div 
                 key={sticker.id}
