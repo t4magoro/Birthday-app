@@ -36,6 +36,23 @@ const generateBalancedDust = (): LoveDustItem[] => {
   return newDust;
 };
 
+// 🔥 SAFARI FIX: waits until an <img> element has a fully decoded bitmap.
+// iOS Safari will often mark an image "loaded" before it's actually usable
+// by canvas-based export tools like html-to-image — exporting before decode
+// finishes is what produced a blank photo on the first Safari download.
+const waitForImageReady = (img: HTMLImageElement): Promise<void> => {
+  if (img.complete && img.naturalWidth > 0) {
+    return img.decode().catch(() => undefined);
+  }
+  return new Promise<void>((resolve) => {
+    const finish = () => resolve();
+    img.addEventListener('load', () => img.decode().then(finish, finish), { once: true });
+    img.addEventListener('error', finish, { once: true });
+    // Safety net so one stuck image can never block the export forever.
+    setTimeout(finish, 4000);
+  });
+};
+
 export const StoryBuilder = ({ redeemedIds, wishes }: StoryBuilderProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const storyRef = useRef<HTMLDivElement>(null);
@@ -138,13 +155,25 @@ export const StoryBuilder = ({ redeemedIds, wishes }: StoryBuilderProps) => {
 
   const exportStory = async () => {
     if (!storyRef.current || isExporting) return;
+    const node = storyRef.current;
     setIsExporting(true);
     
     try {
+      // 0. WAIT FOR THE CARD TO ACTUALLY BE READY
+      // Make sure the photo (and any other <img>s) has fully decoded, and
+      // that web fonts are loaded, before we try to snapshot anything. This
+      // is what let Safari export a half-loaded photo (or fall back to
+      // default font metrics) if Download was pressed too soon.
+      const imgs = Array.from(node.querySelectorAll('img'));
+      await Promise.all([
+        Promise.all(imgs.map(waitForImageReady)),
+        document.fonts?.ready ?? Promise.resolve(),
+      ]);
+
       // 1. THE INVISIBLE FIRST CLICK
       // We force Safari to render a tiny, low-quality version in the background. 
       // We don't save this one; we just use it to force Safari to load the photo into memory.
-      await toJpeg(storyRef.current, {
+      await toJpeg(node, {
         quality: 0.1,
         pixelRatio: 0.1,
         width: 360,
@@ -152,9 +181,17 @@ export const StoryBuilder = ({ redeemedIds, wishes }: StoryBuilderProps) => {
         style: { transform: 'scale(1)', transformOrigin: 'top left' }
       });
 
+      // 🔥 SAFARI FIX: give WebKit real wall-clock time to finish rasterizing
+      // that first pass. This is a documented WebKit/html-to-image bug
+      // (bugs.webkit.org/show_bug.cgi?id=219770) — without an actual pause
+      // here, the two passes fire back-to-back and Safari hasn't caught up,
+      // which is exactly why a *second full click* of Download used to be
+      // needed to make the photo appear.
+      await new Promise((resolve) => setTimeout(resolve, 400));
+
       // 2. THE REAL EXPORT (The "Second" Click)
-      // Now that Safari's cache is primed, we immediately take the real, high-res shot.
-      const dataUrl = await toJpeg(storyRef.current, {
+      // Now that Safari's cache is primed, we take the real, high-res shot.
+      const dataUrl = await toJpeg(node, {
         quality: 0.95,
         pixelRatio: 3, // High resolution for IG Story
         width: 360,

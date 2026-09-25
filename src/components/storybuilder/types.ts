@@ -18,3 +18,12 @@ export interface StickerData {
   y: number;
   rot: number;
 }
+
+export interface LoveDustItem {
+  x: number;
+  y: number;
+  size: number;
+  rot: number;
+  type: 'heart' | 'dot';
+  opacity: number;
+}

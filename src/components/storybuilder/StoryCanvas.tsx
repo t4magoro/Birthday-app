@@ -36,13 +36,19 @@ export const StoryCanvas = ({
     img.onload = () => {
       // Create an INVISIBLE canvas just to do the math and cropping
       const canvas = document.createElement('canvas');
-      canvas.width = 800;
-      canvas.height = 1000;
+      // 🔥 SAFARI FIX: 700x875 (still comfortably more than the ~570px this
+      // photo ever needs at full export resolution) instead of 800x1000.
+      // Safari's SVG/foreignObject export step is known to silently drop
+      // very large embedded data-URI images (bugs.webkit.org/show_bug.cgi?id=219770);
+      // a smaller payload makes that far less likely without any visible
+      // quality loss in the final download.
+      canvas.width = 700;
+      canvas.height = 875;
       const ctx = canvas.getContext('2d');
       
-      const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
-      const drawWidth = img.width * scale;
-      const drawHeight = img.height * scale;
+      const coverScale = Math.max(canvas.width / img.width, canvas.height / img.height);
+      const drawWidth = img.width * coverScale;
+      const drawHeight = img.height * coverScale;
       const offsetX = (canvas.width - drawWidth) / 2;
       const offsetY = (canvas.height - drawHeight) / 2;
       
@@ -51,6 +57,9 @@ export const StoryCanvas = ({
       
       // Convert the perfectly cropped image into a raw string that Safari cannot block!
       setProcessedBase64(canvas.toDataURL('image/jpeg', 0.9));
+    };
+    img.onerror = () => {
+      console.error('StoryCanvas: failed to load source image for processing', currentImg.slice(0, 40));
     };
     img.src = currentImg;
   }, [currentImg]);
@@ -99,10 +108,16 @@ export const StoryCanvas = ({
                 <div className={`${activeTheme.frameClass} w-[190px] flex flex-col shrink-0 shadow-lg`}>
                   
                   {/* 🔥 Reverted to standard <img> tag, but feeding it the safe Base64 string */}
+                  {/* width/height + decoding="sync" help Safari's SVG-based export
+                      lay this out and rasterize it correctly; object-cover is a
+                      safety net in case the source isn't an exact 4:5 crop. */}
                   <img 
                     src={processedBase64}
                     alt="Memory"
-                    className="w-full aspect-[4/5] rounded bg-pink-200"
+                    width={700}
+                    height={875}
+                    decoding="sync"
+                    className="w-full aspect-[4/5] rounded bg-pink-200 object-cover"
                   />
 
                   {activeTheme.id === 'classic' && (
