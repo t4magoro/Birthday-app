@@ -139,30 +139,36 @@ export const StoryBuilder = ({ redeemedIds, wishes }: StoryBuilderProps) => {
 const exportStory = async () => {
     if (!storyRef.current || isExporting) return;
     setIsExporting(true);
+    
     try {
-      // 🔥 FIX FOR iOS/SAFARI: The "Pre-Warm" Render!
-      // This invisible, low-quality render forces the browser to load 
-      // the image into the cache BEFORE we take the real screenshot.
-      await toJpeg(storyRef.current, { 
-        quality: 0.1, 
-        pixelRatio: 0.5,
+      // 🔥 FIX 1: Force Safari to bypass its broken caching system
+      const baseOptions = {
         width: 360,
         height: 640,
-        style: { transform: 'scale(1)', transformOrigin: 'top left' }
-      });
+        style: { transform: 'scale(1)', transformOrigin: 'top left' },
+        cacheBust: true, // Forces fresh rendering
+      };
 
-      // The REAL, High-Res Export
+      // 🔥 FIX 2: The Pre-Warm
+      // Tell Safari to start building the heavy image in the background
+      await toJpeg(storyRef.current, { ...baseOptions, quality: 0.1, pixelRatio: 0.1 });
+
+      // 🔥 FIX 3: THE SAFARI BREATHING ROOM (The Magic Fix)
+      // We literally stop the code for 250 milliseconds. 
+      // This gives Safari's slow engine the exact time it needs to finish decoding 
+      // the Base64 photo into memory before we take the real screenshot!
+      await new Promise(resolve => setTimeout(resolve, 250));
+
+      // 4. The REAL, High-Res Export
       const dataUrl = await toJpeg(storyRef.current, {
+        ...baseOptions,
         quality: 0.95,
-        pixelRatio: 3, // High resolution for IG Story
-        width: 360,
-        height: 640,
-        style: { transform: 'scale(1)', transformOrigin: 'top left' }
+        pixelRatio: 3 // High resolution for IG Story
       });
       
       const link = document.createElement('a');
       link.href = dataUrl;
-      link.download = `Birthday_Story_${CONFIG.HER_NAME}.jpg`;
+      link.download = `Birthday_Story_Design.jpg`;
       link.click();
     } catch (error) {
       console.error("Export failed:", error);
@@ -170,7 +176,7 @@ const exportStory = async () => {
       setIsExporting(false);
     }
   };
-
+  
   return (
     <div className="flex flex-col md:flex-row gap-8 w-full max-w-5xl mx-auto items-center md:items-stretch px-5 md:px-8 pb-12">
       <StoryCanvas 
