@@ -5,7 +5,9 @@ export const STORY_COLORS: StoryColor[] = [
   { id: 'rose', name: 'Vintage Rose', class: 'bg-rose-100', text: 'text-rose-700' },
   { id: 'lavender', name: 'Lavender', class: 'bg-purple-100', text: 'text-purple-700' },
   { id: 'cream', name: 'Warm Cream', class: 'bg-amber-50', text: 'text-amber-700' },
-  { id: 'dark', name: 'Midnight', class: 'bg-slate-900', text: 'text-pink-300' }
+  { id: 'dark', name: 'Midnight', class: 'bg-slate-900', text: 'text-pink-700' },
+  { id: 'matcha', name: 'Matcha Green', class: 'bg-emerald-50', text: 'text-emerald-700' },
+  { id: 'ocean', name: 'Ocean Breeze', class: 'bg-cyan-50', text: 'text-cyan-700' }
 ];
 
 export const THEMES: StoryTheme[] = [
