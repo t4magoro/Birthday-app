@@ -1,9 +1,11 @@
-import { StoryColor, StoryTheme } from './types';
+import { StoryColor, StoryTheme, ShadowLayer } from './types';
 
-export const SHADOW = {
-  sm: '0 1px 2px 0 rgba(0,0,0,0.05)',
-  lg: '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1)',
-  xl: '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
+// Same values as Tailwind's shadow-sm / shadow-lg / shadow-xl, but drawn by
+// <SoftShadow> instead of CSS box-shadow (see SoftShadow.tsx for why).
+export const SHADOW: Record<'sm' | 'lg' | 'xl', ShadowLayer[]> = {
+  sm: [{ y: 1, blur: 2, spread: 0, alpha: 0.05 }],
+  lg: [{ y: 10, blur: 15, spread: -3, alpha: 0.1 }, { y: 4, blur: 6, spread: -4, alpha: 0.1 }],
+  xl: [{ y: 20, blur: 25, spread: -5, alpha: 0.1 }, { y: 8, blur: 10, spread: -6, alpha: 0.1 }],
 };
 
 export const STICKER_DROP_SHADOW =
@@ -20,9 +22,9 @@ export const STORY_COLORS: StoryColor[] = [
 ];
 
 export const THEMES: StoryTheme[] = [
-  { id: 'classic', name: 'Classic Polaroid', frameClass: 'bg-white p-3 pb-8 rounded-sm', shadow: SHADOW.xl },
-  { id: 'modern', name: 'Modern Minimal', frameClass: 'bg-white p-2 rounded-2xl', shadow: SHADOW.lg },
-  { id: 'dreamy', name: 'Dreamy Glow', frameClass: 'bg-white/70  p-3 rounded-2xl border border-white/50', shadow: SHADOW.lg }
+  { id: 'classic', name: 'Classic Polaroid', frameClass: 'bg-white p-3 pb-8 rounded-sm', shadow: SHADOW.xl, radius: 2 },
+  { id: 'modern', name: 'Modern Minimal', frameClass: 'bg-white p-2 rounded-2xl', shadow: SHADOW.lg, radius: 16 },
+  { id: 'dreamy', name: 'Dreamy Glow', frameClass: 'bg-white/70  p-3 rounded-2xl border border-white/50', shadow: SHADOW.lg, radius: 16 }
 ];
 
 export const AVAILABLE_STICKERS = ['✨', '💖', '🎉', '🎂', '🧸', '🌸', '🎀', '💌', '🍀', '🦋'];

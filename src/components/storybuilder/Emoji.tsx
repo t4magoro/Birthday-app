@@ -26,6 +26,8 @@ export const Emoji = ({ emoji, className }: EmojiProps) => (
     // Load with CORS from the start so Safari caches a CORS-enabled copy that
     // html-to-image's fetch() can reuse at export time.
     crossOrigin="anonymous"
-    className={className}
+    // max-w-none: Tailwind's base `img { max-width: 100% }` otherwise squashes
+    // stickers placed near the card's right edge (their wrapper shrinks to fit).
+    className={`max-w-none ${className ?? ''}`}
   />
 );
