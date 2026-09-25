@@ -1,6 +1,7 @@
 import { CONFIG } from '../../config';
 import React, { useState, useEffect } from 'react';
 import { StoryColor, StoryTheme, StickerData, LoveDustItem } from './types';
+import { SHADOW, STICKER_DROP_SHADOW } from './constants'; // add this import
 
 interface StoryCanvasProps {
   containerRef: React.Ref<HTMLDivElement>;
@@ -105,7 +106,8 @@ export const StoryCanvas = ({
             {/* Photo Area */}
             <div className="flex flex-col items-center justify-center z-10 w-full shrink-0 mb-5">
               <div className={`p-1.5 rounded-3xl border-2 border-dashed border-current ${activeColor.text} transition-colors duration-300`}>
-                <div className={`${activeTheme.frameClass} w-[190px] flex flex-col shrink-0 shadow-lg`}>
+                <div className={`${activeTheme.frameClass} w-[190px] flex flex-col shrink-0`}
+                style={{ boxShadow: activeTheme.shadow }}>
                   
                   {/* 🔥 Reverted to standard <img> tag, but feeding it the safe Base64 string */}
                   {/* width/height + decoding="sync" help Safari's SVG-based export
@@ -133,7 +135,7 @@ export const StoryCanvas = ({
             <div className="shrink-0 flex flex-col gap-3 z-10 w-full max-w-[300px]">
               {wishes.length > 0 && (
                 // 🔥 iOS FIX 2: Replaced backdrop-blur-md with bg-white/95 to prevent Safari shadow glitches
-                <div className="bg-white/95 rounded-2xl p-3 border border-white/50 shadow-sm w-full">
+                <div className="bg-white/95 rounded-2xl p-3 border border-white/50 w-full" style={{ boxShadow: SHADOW.sm }}>
                   <p className={`text-[9px] font-bold uppercase tracking-widest mb-1.5 text-center ${activeColor.text}`}>Your Birthday Wish ✨</p>
                   <div className="flex flex-col gap-1">
                     {wishes.map((wish, idx) => (
@@ -145,13 +147,13 @@ export const StoryCanvas = ({
 
               {claimedCoupons.length > 0 && (
                 // 🔥 iOS FIX 2: Replaced backdrop-blur-md with bg-white/95 to prevent Safari shadow glitches
-                <div className="bg-white/95 rounded-2xl p-3 border border-white/50 shadow-sm w-full">
+                <div className="bg-white/95 rounded-2xl p-3 border border-white/50 w-full" style={{ boxShadow: SHADOW.sm }}>
                   <p className={`text-[9px] font-bold uppercase tracking-widest mb-1.5 text-center ${activeColor.text}`}>CLAIMED COUPONS</p>
                   <div className="flex flex-col gap-1.5">
                     {claimedCoupons.map(coupon => {
                       const Icon = coupon.icon;
                       return (
-                        <div key={coupon.id} className="flex items-center gap-2 bg-white px-2 py-1.5 rounded-lg shadow-sm">
+                        <div key={coupon.id} className="flex items-center gap-2 bg-white px-2 py-1.5 rounded-lg" style={{ boxShadow: SHADOW.sm }}>
                           <div className="bg-pink-50 p-1 rounded-md text-pink-500 shrink-0">
                             <Icon className="w-3 h-3" />
                           </div>
@@ -172,7 +174,8 @@ export const StoryCanvas = ({
                 style={{ 
                   left: `${sticker.x}%`, 
                   top: `${sticker.y}%`, 
-                  transform: `translate(-50%, -50%) rotate(${sticker.rot}deg)` 
+                  transform: `translate(-50%, -50%) rotate(${sticker.rot}deg)`,
+                  filter: STICKER_DROP_SHADOW,
                 }}
               >
                 {sticker.emoji}

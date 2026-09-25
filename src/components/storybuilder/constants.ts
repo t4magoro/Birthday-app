@@ -1,5 +1,16 @@
 import { StoryColor, StoryTheme } from './types';
 
+
+
+export const SHADOW = {
+  sm: '0 1px 2px 0 rgba(0,0,0,0.05)',
+  lg: '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1)',
+  xl: '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
+};
+
+export const STICKER_DROP_SHADOW =
+  'drop-shadow(0 4px 3px rgba(0,0,0,0.07)) drop-shadow(0 2px 2px rgba(0,0,0,0.06))';
+
 export const STORY_COLORS: StoryColor[] = [
   { id: 'pink', name: 'Pastel Pink', class: 'bg-[#FFF0F5]', text: 'text-pink-600' },
   { id: 'rose', name: 'Vintage Rose', class: 'bg-rose-100', text: 'text-rose-700' },
@@ -11,9 +22,9 @@ export const STORY_COLORS: StoryColor[] = [
 ];
 
 export const THEMES: StoryTheme[] = [
-  { id: 'classic', name: 'Classic Polaroid', frameClass: 'bg-white p-3 pb-8 rounded-sm shadow-xl' },
-  { id: 'modern', name: 'Modern Minimal', frameClass: 'bg-white p-2 rounded-2xl shadow-lg' },
-  { id: 'dreamy', name: 'Dreamy Glow', frameClass: 'bg-white/40 backdrop-blur-md p-3 rounded-2xl border border-white/50 shadow-lg' }
+  { id: 'classic', name: 'Classic Polaroid', frameClass: 'bg-white p-3 pb-8 rounded-sm', shadow: SHADOW.xl },
+  { id: 'modern', name: 'Modern Minimal', frameClass: 'bg-white p-2 rounded-2xl', shadow: SHADOW.lg },
+  { id: 'dreamy', name: 'Dreamy Glow', frameClass: 'bg-white/40 bg-white/70 p-3 rounded-2xl border border-white/50', shadow: SHADOW.lg }
 ];
 
 export const AVAILABLE_STICKERS = ['✨', '💖', '🎉', '🎂', '🧸', '🌸', '🎀', '💌', '🍀', '🦋'];

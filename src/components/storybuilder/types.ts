@@ -27,3 +27,10 @@ export interface LoveDustItem {
   type: 'heart' | 'dot';
   opacity: number;
 }
+
+export interface StoryTheme {
+  id: string;
+  name: string;
+  frameClass: string;
+  shadow: string; // literal box-shadow, no CSS vars — safe for Safari export
+}
