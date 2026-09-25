@@ -69,15 +69,39 @@ export const StoryBuilder = ({ redeemedIds, wishes }: StoryBuilderProps) => {
   }, []);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // 🔥 FIX FOR iOS: Convert the image to a Base64 string instead of a Blob URL
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUploadedImg(reader.result as string);
+   const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        // 🔥 FIX FOR iOS: Shrink massive iPhone photos so Safari doesn't crash!
+        const canvas = document.createElement('canvas');
+        const MAX_SIZE = 1080; // Safe limit for High-Res IG Story quality
+        let width = img.width;
+        let height = img.height;
+
+        // Calculate new dimensions while keeping aspect ratio
+        if (width > height && width > MAX_SIZE) {
+          height *= MAX_SIZE / width;
+          width = MAX_SIZE;
+        } else if (height > MAX_SIZE) {
+          width *= MAX_SIZE / height;
+          height = MAX_SIZE;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(img, 0, 0, width, height);
+        
+        // Save as an optimized JPEG base64 string (much smaller memory footprint)
+        setUploadedImg(canvas.toDataURL('image/jpeg', 0.85));
       };
-      reader.readAsDataURL(file);
-    }
+      img.src = event.target?.result as string;
+    };
+    reader.readAsDataURL(file);
   };
 
   const addSticker = (emoji: string) => {

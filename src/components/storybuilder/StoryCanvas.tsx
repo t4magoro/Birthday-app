@@ -62,17 +62,24 @@ export const StoryCanvas = ({
               <div className={`p-1.5 rounded-3xl border-2 border-dashed border-current ${activeColor.text} transition-colors duration-300`}>
                 <div className={`${activeTheme.frameClass} w-[190px] flex flex-col shrink-0 shadow-lg`}>
                   
-                  {/* 🔥 FIX FOR iOS: Replaced background-image div with a real img tag */}
-                  <img 
-                    src={uploadedImg || CONFIG.PHOTOS[0]?.url || ''} 
-                    crossOrigin="anonymous"
-                    alt="Memory"
-                    className="w-full aspect-[4/5] object-cover rounded bg-pink-200"
-                  />
+                  {/* 🔥 FIX FOR iOS: Only apply crossOrigin if it is an external config URL */}
+                  {(() => {
+                    const currentImg = uploadedImg || CONFIG.PHOTOS[0]?.url || '';
+                    const isBase64 = currentImg.startsWith('data:');
+                    
+                    return (
+                      <img 
+                        src={currentImg} 
+                        crossOrigin={isBase64 ? undefined : "anonymous"}
+                        alt="Memory"
+                        className="w-full aspect-[4/5] object-cover rounded bg-pink-200"
+                      />
+                    );
+                  })()}
 
                   {activeTheme.id === 'classic' && (
                     <p className="text-center font-serif text-gray-700 italic mt-2 px-1 text-[10px] leading-tight line-clamp-1">
-                      {CONFIG.PHOTOS[0]?.caption || "A moment to remember"}
+                      {"A moment to remember"}
                     </p>
                   )}
                 </div>
