@@ -136,25 +136,38 @@ export const StoryBuilder = ({ redeemedIds, wishes }: StoryBuilderProps) => {
   // Triggered by the new button to reroll the background
   const shuffleDust = () => setLoveDust(generateBalancedDust());
 
-const exportStory = async () => {
+  const exportStory = async () => {
     if (!storyRef.current || isExporting) return;
     setIsExporting(true);
     
     try {
-      // The canvas does all the work now, so we just take one high-quality shot!
+      // 1. THE INVISIBLE FIRST CLICK
+      // We force Safari to render a tiny, low-quality version in the background. 
+      // We don't save this one; we just use it to force Safari to load the photo into memory.
+      await toJpeg(storyRef.current, {
+        quality: 0.1,
+        pixelRatio: 0.1,
+        width: 360,
+        height: 640,
+        style: { transform: 'scale(1)', transformOrigin: 'top left' }
+      });
+
+      // 2. THE REAL EXPORT (The "Second" Click)
+      // Now that Safari's cache is primed, we immediately take the real, high-res shot.
       const dataUrl = await toJpeg(storyRef.current, {
         quality: 0.95,
         pixelRatio: 3, // High resolution for IG Story
         width: 360,
         height: 640,
-        style: { transform: 'scale(1)', transformOrigin: 'top left' },
-        cacheBust: true
+        style: { transform: 'scale(1)', transformOrigin: 'top left' }
       });
       
+      // 3. Download the perfect image
       const link = document.createElement('a');
       link.href = dataUrl;
       link.download = `Birthday_Story_${CONFIG.HER_NAME || 'Design'}.jpg`;
       link.click();
+      
     } catch (error) {
       console.error("Export failed:", error);
     } finally {

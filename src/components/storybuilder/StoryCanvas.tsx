@@ -1,5 +1,5 @@
 import { CONFIG } from '../../config';
-import React, { useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StoryColor, StoryTheme, StickerData, LoveDustItem } from './types';
 
 interface StoryCanvasProps {
@@ -20,28 +20,26 @@ export const StoryCanvas = ({
   uploadedImg, stickers, wishes, claimedCoupons, loveDust
 }: StoryCanvasProps) => {
 
-  // 🔥 THE ULTIMATE iOS FIX: Placed right here before the return statement!
-  const photoCanvasRef = useRef<HTMLCanvasElement>(null);
+  // 🔥 iOS FIX 1: Store the perfectly cropped image as a pure Base64 text string
+  const [processedBase64, setProcessedBase64] = useState<string>('');
   const currentImg = uploadedImg || CONFIG.PHOTOS[0]?.url || '';
 
   useEffect(() => {
-    const canvas = photoCanvasRef.current;
-    if (!canvas || !currentImg) return;
+    if (!currentImg) return;
     
-    const ctx = canvas.getContext('2d');
     const img = new Image();
-    
     // Only use crossOrigin for external web links, not local uploads
     if (!currentImg.startsWith('data:')) {
       img.crossOrigin = 'anonymous';
     }
     
     img.onload = () => {
-      // Set high-res internal dimensions for a perfect 4:5 portrait aspect ratio
+      // Create an INVISIBLE canvas just to do the math and cropping
+      const canvas = document.createElement('canvas');
       canvas.width = 800;
       canvas.height = 1000;
+      const ctx = canvas.getContext('2d');
       
-      // Math to perfectly replicate Tailwind's "object-cover"
       const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
       const drawWidth = img.width * scale;
       const drawHeight = img.height * scale;
@@ -50,6 +48,9 @@ export const StoryCanvas = ({
       
       ctx?.clearRect(0, 0, canvas.width, canvas.height);
       ctx?.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+      
+      // Convert the perfectly cropped image into a raw string that Safari cannot block!
+      setProcessedBase64(canvas.toDataURL('image/jpeg', 0.9));
     };
     img.src = currentImg;
   }, [currentImg]);
@@ -97,11 +98,11 @@ export const StoryCanvas = ({
               <div className={`p-1.5 rounded-3xl border-2 border-dashed border-current ${activeColor.text} transition-colors duration-300`}>
                 <div className={`${activeTheme.frameClass} w-[190px] flex flex-col shrink-0 shadow-lg`}>
                   
-                  {/* 🔥 FIXED: The canvas now draws the image so Safari doesn't block the export */}
-                  <canvas 
-                    ref={photoCanvasRef}
+                  {/* 🔥 Reverted to standard <img> tag, but feeding it the safe Base64 string */}
+                  <img 
+                    src={processedBase64}
+                    alt="Memory"
                     className="w-full aspect-[4/5] rounded bg-pink-200"
-                    style={{ display: 'block' }}
                   />
 
                   {activeTheme.id === 'classic' && (
@@ -116,7 +117,8 @@ export const StoryCanvas = ({
             {/* Dynamic Stack (Wishes & Coupons) */}
             <div className="shrink-0 flex flex-col gap-3 z-10 w-full max-w-[300px]">
               {wishes.length > 0 && (
-                <div className="bg-white/70 backdrop-blur-md rounded-2xl p-3 border border-white/50 shadow-sm w-full">
+                // 🔥 iOS FIX 2: Replaced backdrop-blur-md with bg-white/95 to prevent Safari shadow glitches
+                <div className="bg-white/95 rounded-2xl p-3 border border-white/50 shadow-sm w-full">
                   <p className={`text-[9px] font-bold uppercase tracking-widest mb-1.5 text-center ${activeColor.text}`}>Your Birthday Wish ✨</p>
                   <div className="flex flex-col gap-1">
                     {wishes.map((wish, idx) => (
@@ -127,8 +129,9 @@ export const StoryCanvas = ({
               )}
 
               {claimedCoupons.length > 0 && (
-                <div className="bg-white/70 backdrop-blur-md rounded-2xl p-3 border border-white/50 shadow-sm w-full">
-                  <p className={`text-[9px] font-bold uppercase tracking-widest mb-1.5 text-center ${activeColor.text}`}>claimed Coupons</p>
+                // 🔥 iOS FIX 2: Replaced backdrop-blur-md with bg-white/95 to prevent Safari shadow glitches
+                <div className="bg-white/95 rounded-2xl p-3 border border-white/50 shadow-sm w-full">
+                  <p className={`text-[9px] font-bold uppercase tracking-widest mb-1.5 text-center ${activeColor.text}`}>CLAIMED COUPONS</p>
                   <div className="flex flex-col gap-1.5">
                     {claimedCoupons.map(coupon => {
                       const Icon = coupon.icon;
