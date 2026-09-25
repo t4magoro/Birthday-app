@@ -136,17 +136,30 @@ export const StoryBuilder = ({ redeemedIds, wishes }: StoryBuilderProps) => {
   // Triggered by the new button to reroll the background
   const shuffleDust = () => setLoveDust(generateBalancedDust());
 
-  const exportStory = async () => {
+const exportStory = async () => {
     if (!storyRef.current || isExporting) return;
     setIsExporting(true);
     try {
-      const dataUrl = await toJpeg(storyRef.current, {
-        quality: 0.95,
-        pixelRatio: 3, 
+      // 🔥 FIX FOR iOS/SAFARI: The "Pre-Warm" Render!
+      // This invisible, low-quality render forces the browser to load 
+      // the image into the cache BEFORE we take the real screenshot.
+      await toJpeg(storyRef.current, { 
+        quality: 0.1, 
+        pixelRatio: 0.5,
         width: 360,
         height: 640,
         style: { transform: 'scale(1)', transformOrigin: 'top left' }
       });
+
+      // The REAL, High-Res Export
+      const dataUrl = await toJpeg(storyRef.current, {
+        quality: 0.95,
+        pixelRatio: 3, // High resolution for IG Story
+        width: 360,
+        height: 640,
+        style: { transform: 'scale(1)', transformOrigin: 'top left' }
+      });
+      
       const link = document.createElement('a');
       link.href = dataUrl;
       link.download = `Birthday_Story_${CONFIG.HER_NAME}.jpg`;
