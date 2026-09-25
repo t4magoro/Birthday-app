@@ -2,6 +2,8 @@ import React from 'react';
 import { Download, ImagePlus, Palette, Sparkles, Trash2, Settings2, RefreshCcw } from 'lucide-react';
 import { STORY_COLORS, THEMES, AVAILABLE_STICKERS } from './constants';
 import { StoryColor, StoryTheme, StickerData } from './types';
+import { Emoji } from './Emoji';
+
 
 interface DesignToolsProps {
   activeColor: StoryColor;
@@ -105,7 +107,7 @@ export const DesignTools = ({
                   onClick={() => addSticker(emoji)}
                   className="w-11 h-11 bg-white/60 hover:bg-white/90 rounded-2xl text-xl transition-transform hover:scale-110 active:scale-95 border border-white/50 flex items-center justify-center shadow-sm"
                 >
-                  {emoji}
+                  <Emoji emoji={emoji} className="w-6 h-6" />
                 </button>
               ))}
             </div>

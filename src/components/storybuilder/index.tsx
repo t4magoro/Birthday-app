@@ -41,17 +41,26 @@ const generateBalancedDust = (): LoveDustItem[] => {
 // by canvas-based export tools like html-to-image — exporting before decode
 // finishes is what produced a blank photo on the first Safari download.
 const waitForImageReady = (img: HTMLImageElement): Promise<void> => {
-  if (img.complete && img.naturalWidth > 0) {
-    return img.decode().catch(() => undefined);
-  }
   return new Promise<void>((resolve) => {
     const finish = () => resolve();
-    img.addEventListener('load', () => img.decode().then(finish, finish), { once: true });
-    img.addEventListener('error', finish, { once: true });
-    // Safety net so one stuck image can never block the export forever.
+    if (img.complete) {
+      // Already finished (loaded OR broken): no load/error event is coming, so
+      // don't wait for one. decode() rejects straight away for a broken image.
+      img.decode().then(finish, finish);
+    } else {
+      img.addEventListener('load', () => img.decode().then(finish, finish), { once: true });
+      img.addEventListener('error', finish, { once: true });
+    }
+    // Safety net so one stuck image (or a decode() that never settles) can
+    // never leave the button stuck on "Saving Image..." forever.
     setTimeout(finish, 4000);
   });
 };
+
+// 🔥 EXPORT FIX: html-to-image rejects the WHOLE export if any <img> can't be
+// fetched (e.g. a sticker CDN is blocked). With a placeholder, that one image
+// just renders transparent and the card still downloads.
+const TRANSPARENT_PIXEL = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
 export const StoryBuilder = ({ redeemedIds, wishes }: StoryBuilderProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -178,6 +187,7 @@ export const StoryBuilder = ({ redeemedIds, wishes }: StoryBuilderProps) => {
         pixelRatio: 0.1,
         width: 360,
         height: 640,
+        imagePlaceholder: TRANSPARENT_PIXEL,
         style: { transform: 'scale(1)', transformOrigin: 'top left' }
       });
 
@@ -196,6 +206,7 @@ export const StoryBuilder = ({ redeemedIds, wishes }: StoryBuilderProps) => {
         pixelRatio: 3, // High resolution for IG Story
         width: 360,
         height: 640,
+        imagePlaceholder: TRANSPARENT_PIXEL,
         style: { transform: 'scale(1)', transformOrigin: 'top left' }
       });
       

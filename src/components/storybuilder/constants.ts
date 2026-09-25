@@ -1,7 +1,5 @@
 import { StoryColor, StoryTheme } from './types';
 
-
-
 export const SHADOW = {
   sm: '0 1px 2px 0 rgba(0,0,0,0.05)',
   lg: '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1)',
@@ -24,7 +22,7 @@ export const STORY_COLORS: StoryColor[] = [
 export const THEMES: StoryTheme[] = [
   { id: 'classic', name: 'Classic Polaroid', frameClass: 'bg-white p-3 pb-8 rounded-sm', shadow: SHADOW.xl },
   { id: 'modern', name: 'Modern Minimal', frameClass: 'bg-white p-2 rounded-2xl', shadow: SHADOW.lg },
-  { id: 'dreamy', name: 'Dreamy Glow', frameClass: 'bg-white/40 bg-white/70 p-3 rounded-2xl border border-white/50', shadow: SHADOW.lg }
+  { id: 'dreamy', name: 'Dreamy Glow', frameClass: 'bg-white/70  p-3 rounded-2xl border border-white/50', shadow: SHADOW.lg }
 ];
 
 export const AVAILABLE_STICKERS = ['✨', '💖', '🎉', '🎂', '🧸', '🌸', '🎀', '💌', '🍀', '🦋'];

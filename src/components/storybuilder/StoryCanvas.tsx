@@ -2,6 +2,7 @@ import { CONFIG } from '../../config';
 import React, { useState, useEffect } from 'react';
 import { StoryColor, StoryTheme, StickerData, LoveDustItem } from './types';
 import { SHADOW, STICKER_DROP_SHADOW } from './constants'; // add this import
+import { Emoji } from './Emoji';
 
 interface StoryCanvasProps {
   containerRef: React.Ref<HTMLDivElement>;
@@ -100,7 +101,7 @@ export const StoryCanvas = ({
             {/* Header */}
             <div className="text-center z-10 shrink-0 mb-5">
               <h1 className={`text-[32px] font-bold font-serif leading-none tracking-tight mb-1 ${activeColor.text}`}>Happy Birthday</h1>
-              <p className={`font-medium text-sm opacity-80 ${activeColor.text}`}>{CONFIG.HER_NAME} ❤️</p>
+              <p className={`font-medium text-sm opacity-80 ${activeColor.text}`}>{CONFIG.HER_NAME} <Emoji emoji="❤️" className="inline-block align-[-2px] w-4 h-4"/></p>
             </div>
 
             {/* Photo Area */}
@@ -153,11 +154,11 @@ export const StoryCanvas = ({
                     {claimedCoupons.map(coupon => {
                       const Icon = coupon.icon;
                       return (
-                        <div key={coupon.id} className="flex items-center gap-2 bg-white px-2 py-1.5 rounded-lg" style={{ boxShadow: SHADOW.sm }}>
+                        <div key={coupon.id} className={`flex items-center gap-2 ${activeColor.class} px-2 py-1.5 rounded-lg`} style={{ boxShadow: SHADOW.sm }}>
                           <div className="bg-pink-50 p-1 rounded-md text-pink-500 shrink-0">
                             <Icon className="w-3 h-3" />
                           </div>
-                          <span className="font-bold text-gray-700 text-[10px] truncate leading-none pt-0.5">{coupon.title}</span>
+                          <span className={`font-bold ${activeColor.text} text-[10px] truncate leading-none pt-0.5`}>{coupon.title}</span>
                         </div>
                       );
                     })}
@@ -178,7 +179,7 @@ export const StoryCanvas = ({
                   filter: STICKER_DROP_SHADOW,
                 }}
               >
-                {sticker.emoji}
+                <Emoji emoji={sticker.emoji} className="inline-block w-9 h-9" />
               </div>
             ))}
           </div>

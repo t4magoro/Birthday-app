@@ -5,6 +5,8 @@ export interface StoryColor {
   text: string;
 }
 
+declare module 'twemoji';
+
 export interface StoryTheme {
   id: string;
   name: string;
