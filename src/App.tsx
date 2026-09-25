@@ -4,6 +4,8 @@ import { MainPage } from './pages/MainPage';
 import { StoryBuilder } from './components/storybuilder';
 import { BackgroundDust} from './components/BackgroundDust';
 import { BackgroundHeart } from './components/BackgroundHeart';
+import {MusicButton} from './components/MusicButton'
+
 
 
 export default function App() {
@@ -70,6 +72,7 @@ export default function App() {
         )}
         
       </div>
+      <MusicButton aboveConfetti={activeView === 'main'} />
     </div>
   );
 }

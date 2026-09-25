@@ -120,15 +120,21 @@ export const Hero = () => {
 
       {/* THE SECRET EASTER EGG MODAL */}
       {showSecret && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-pink-100/60 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="bg-white p-8 rounded-3xl shadow-2xl max-w-sm w-full relative animate-in zoom-in slide-in-from-bottom-8 duration-500 border-2 border-pink-200">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-pink-100/60 backdrop-blur-sm animate-in fade-in duration-300"
+          onClick={() => setShowSecret(false)} // tapping the dimmed background closes it
+        >
+          <div
+            className="bg-white p-8 rounded-3xl shadow-2xl max-w-sm w-full relative animate-in zoom-in slide-in-from-bottom-8 duration-500 border-2 border-pink-200"
+            onClick={(e) => e.stopPropagation()} // taps inside the card don't
+          >
             
+            {/* z-10 keeps the button above the bouncing 🐾, which used to cover it and swallow taps */}
             <button 
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowSecret(false);
-              }}
-              className="absolute top-4 right-4 text-pink-300 hover:text-pink-500 transition-colors bg-pink-50 p-2 rounded-full"
+              onClick={() => setShowSecret(false)}
+              aria-label="Close"
+              className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-pink-50 text-pink-300 cursor-pointer touch-manipulation transition-all duration-200 ease-out hover:bg-pink-100 hover:text-pink-500 hover:scale-110 hover:rotate-90 active:scale-90"
+              style={{ WebkitTapHighlightColor: 'transparent' }}
             >
               <X className="w-5 h-5" />
             </button>

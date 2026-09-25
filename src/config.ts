@@ -10,6 +10,8 @@ import img5 from './assets/5.jpeg';
 import img6 from './assets/6.jpeg';
 import img7 from './assets/7.jpeg';
 
+
+
 const rawPhotos = [
   { url: img1, caption: "SO BYUTIPULL 🥰" },
   { url: img2, caption: "SO KYUTTTTT ☀️" },
@@ -25,6 +27,8 @@ const angles = [-2, 3, -1, 2, -3, 1,2, -3, 1];
 
 export const CONFIG = {
   HER_NAME: "Hera",
+
+  MUSIC_URL: `${import.meta.env.BASE_URL}music/birthday.mp3`,
   
   MESSAGE_TEXT: `Happy Birthday to my favorite person in the world! 
   Every day with you is an adventure, and I am so grateful for all the laughs, 
