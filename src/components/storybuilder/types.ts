@@ -3,6 +3,8 @@ export interface StoryColor {
   name: string;
   class: string;
   text: string;
+  cardText?: string;  // text inside the white cards (defaults to `text`)
+  chip?: string;      // coupon row background (defaults to `class`)
 }
 
 declare module 'twemoji';
@@ -11,6 +13,7 @@ export interface StoryTheme {
   id: string;
   name: string;
   frameClass: string;
+
 }
 
 export interface StickerData {

@@ -16,11 +16,12 @@ interface MainPageProps {
   setWishes: React.Dispatch<React.SetStateAction<string[]>>;
   redeemedIds: number[];
   setRedeemedIds: React.Dispatch<React.SetStateAction<number[]>>;
+  prizesUnlocked: boolean;
+  setPrizesUnlocked: React.Dispatch<React.SetStateAction<boolean>>;
   onDesignClick: () => void;
 }
 
-export const MainPage = ({ wishes, setWishes, redeemedIds, setRedeemedIds, onDesignClick }: MainPageProps) => {
-  const [prizesUnlocked, setPrizesUnlocked] = useState(false);
+export const MainPage = ({ wishes, setWishes, redeemedIds, setRedeemedIds, prizesUnlocked, setPrizesUnlocked, onDesignClick }: MainPageProps) => {
 
   const handleUnlockPrizes = () => {
     setPrizesUnlocked(true);

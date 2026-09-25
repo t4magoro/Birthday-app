@@ -1,9 +1,10 @@
 import { CONFIG } from '../../config';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect,useRef } from 'react';
 import { StoryColor, StoryTheme, StickerData, LoveDustItem } from './types';
-import { SHADOW, STICKER_DROP_SHADOW } from './constants'; // add this import
+import { SHADOW, STICKER_DROP_SHADOW, MAX_STORY_WISHES } from './constants'; // add this import
 import { Emoji } from './Emoji';
 import { SoftShadow } from './SoftShadow';
+
 
 interface StoryCanvasProps {
   containerRef: React.Ref<HTMLDivElement>;
@@ -23,9 +24,25 @@ export const StoryCanvas = ({
   uploadedImg, stickers, wishes, claimedCoupons, loveDust
 }: StoryCanvasProps) => {
 
+  const cardText = activeColor.cardText ?? activeColor.text;
+  const chipBg = activeColor.chip ?? activeColor.class;
+  const shownWishes = wishes.slice(0, MAX_STORY_WISHES);
+  const hiddenWishes = wishes.length - shownWishes.length;
   // 🔥 iOS FIX 1: Store the perfectly cropped image as a pure Base64 text string
   const [processedBase64, setProcessedBase64] = useState<string>('');
   const currentImg = uploadedImg || CONFIG.PHOTOS[0]?.url || '';
+
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [fitScale, setFitScale] = useState(1);
+  useLayoutEffect(() => {
+    const el = contentRef.current;
+    if (!el) return;
+    const fit = () => setFitScale(Math.min(1, 600 / el.offsetHeight)); // offsetHeight ignores the scale itself
+    fit();
+    const observer = new ResizeObserver(fit);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (!currentImg) return;
@@ -98,7 +115,13 @@ export const StoryCanvas = ({
                 })}
               </div>
             </div>
-
+             {/* Everything except the background & stickers, shrunk as a whole when it's taller than the card */}
+            <div
+              ref={contentRef}
+              className="relative z-10 w-full shrink-0 flex flex-col items-center"
+              style={fitScale < 1 ? { transform: `scale(${fitScale})` } : undefined}
+            >
+            
             {/* Header */}
             <div className="text-center z-10 shrink-0 mb-5">
               <h1 className={`text-[32px] font-bold font-serif leading-none tracking-tight mb-1 ${activeColor.text}`}>Happy Birthday</h1>
@@ -115,6 +138,7 @@ export const StoryCanvas = ({
                   {/* width/height + decoding="sync" help Safari's SVG-based export
                       lay this out and rasterize it correctly; object-cover is a
                       safety net in case the source isn't an exact 4:5 crop. */}
+                {processedBase64 ? (
                   <img 
                     src={processedBase64}
                     alt="Memory"
@@ -123,6 +147,10 @@ export const StoryCanvas = ({
                     decoding="sync"
                     className="w-full aspect-[4/5] rounded bg-pink-200 object-cover"
                   />
+                  ) : (
+                    // same size & colour as the photo, shown for the moment before it's ready
+                    <div className="w-full aspect-[4/5] rounded bg-pink-200" />
+                  )}
 
                   {activeTheme.id === 'classic' && (
                     <p className="text-center font-serif text-gray-700 italic mt-2 px-1 text-[10px] leading-tight line-clamp-1">
@@ -141,10 +169,15 @@ export const StoryCanvas = ({
                   <SoftShadow layers={SHADOW.sm} radius={16} />
                   <p className={`text-[9px] font-bold uppercase tracking-widest mb-1.5 text-center ${activeColor.text}`}>Your Birthday Wish ✨</p>
                   <div className="flex flex-col gap-1">
-                    {wishes.map((wish, idx) => (
-                      <p key={idx} className="text-[11px] font-serif text-gray-800 text-center italic leading-tight line-clamp-2">"{wish}"</p>
+                    {shownWishes.map((wish, idx) => (
+                      <p key={idx} className="text-[11px] font-serif text-gray-800 text-center italic leading-tight line-clamp-2 [overflow-wrap:anywhere]">"{wish}"</p>
                     ))}
                   </div>
+                  {hiddenWishes > 0 && (
+                    <p className="text-[9px] font-medium text-gray-500 text-center mt-1">
+                      +{hiddenWishes} more {hiddenWishes === 1 ? 'wish' : 'wishes'}
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -169,6 +202,7 @@ export const StoryCanvas = ({
                   </div>
                 </div>
               )}
+            </div>
             </div>
 
             {/* Stickers */}

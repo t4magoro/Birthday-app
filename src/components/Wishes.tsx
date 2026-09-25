@@ -64,16 +64,18 @@ export const Wishes = ({ wishes, setWishes }: WishesProps) => {
             
             <form onSubmit={handleAddWish} className="flex gap-2 mb-6">
               <input 
+                id="wish-input"
                 type="text" 
                 value={currentWish} 
                 onChange={(e) => setCurrentWish(e.target.value)} 
-                placeholder="I wish for..." 
-                className="flex-1 px-4 py-3 rounded-xl border-2 border-pink-200 focus:ring-2 focus:ring-pink-200 outline-none transition-all" 
+                placeholder="I wish for..."
+                maxLength={100}   
+                className="flex-1 min-w-0 px-4 py-3 rounded-xl border-2 border-pink-200 focus:ring-2 focus:ring-pink-200 outline-none transition-all" 
               />
               <button 
                 type="submit" 
                 disabled={!currentWish.trim()} 
-                className="bg-pink-100 text-pink-600 hover:bg-pink-200 p-3 rounded-xl disabled:opacity-50 transition-colors active:scale-95"
+                className="min-w-0 bg-pink-100 text-pink-600 hover:bg-pink-200 p-3 rounded-xl disabled:opacity-50 transition-colors active:scale-95"
               >
                 <Plus className="w-6 h-6" />
               </button>
@@ -86,17 +88,21 @@ export const Wishes = ({ wishes, setWishes }: WishesProps) => {
                 </div>
               ) : (
                 wishes.map((wish, idx) => (
-                  <div key={idx} className="flex items-center justify-between bg-pink-50 px-4 py-3 rounded-xl animate-in slide-in-from-left-2">
-                    <span className="text-gray-700 font-medium flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-pink-400" /> {wish}
+                  <div key={idx} className="flex items-center justify-between gap-3 bg-pink-50 px-4 py-3 rounded-xl animate-in slide-in-from-left-2">
+                    {/* min-w-0 + overflow-wrap:anywhere let long words wrap instead of pushing the delete button out */}
+                    <span className="min-w-0 text-gray-700 font-medium flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-pink-400 shrink-0" />
+                      <span className="min-w-0 [overflow-wrap:anywhere]">{wish}</span>
                     </span>
                     <button 
                       onClick={() => handleRemoveWish(idx)} 
-                      className="text-pink-300 hover:text-red-400 transition-colors"
+                      aria-label="Remove wish"
+                      className="shrink-0 text-pink-300 hover:text-red-400 transition-colors"
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
+
                 ))
               )}
             </div>

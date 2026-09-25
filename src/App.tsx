@@ -10,6 +10,7 @@ export default function App() {
   // --- SHARED GLOBAL DATA ---
   const [wishes, setWishes] = useState<string[]>([]);
   const [redeemedIds, setRedeemedIds] = useState<number[]>([]);
+  const [prizesUnlocked, setPrizesUnlocked] = useState(false);
 
   // --- ROUTING & ANIMATION STATES ---
   const [activeView, setActiveView] = useState<'main' | 'builder'>('main');
@@ -38,6 +39,8 @@ export default function App() {
             setWishes={setWishes}
             redeemedIds={redeemedIds}
             setRedeemedIds={setRedeemedIds}
+            prizesUnlocked={prizesUnlocked}
+            setPrizesUnlocked={setPrizesUnlocked}
             onDesignClick={() => handleViewSwitch('builder')}
           />
         ) : (

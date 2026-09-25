@@ -86,7 +86,7 @@ export const DesignTools = ({
           <div>
             <h3 className="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-3 flex items-center gap-2"><ImagePlus className="w-4 h-4"/> Your Photo</h3>
             <label className="block w-full border-2 border-dashed border-pink-300 bg-white/40 hover:bg-white/60 text-pink-600 transition-colors rounded-2xl p-4 text-center cursor-pointer font-bold text-sm shadow-sm">
-              <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+              <input id="story-photo-upload" name="photo" type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
               {uploadedImg ? 'Swap Custom Photo' : 'Upload Custom Photo'}
             </label>
           </div>
