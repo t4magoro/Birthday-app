@@ -61,13 +61,18 @@ export const StoryCanvas = ({
             <div className="flex flex-col items-center justify-center z-10 w-full shrink-0 mb-5">
               <div className={`p-1.5 rounded-3xl border-2 border-dashed border-current ${activeColor.text} transition-colors duration-300`}>
                 <div className={`${activeTheme.frameClass} w-[190px] flex flex-col shrink-0 shadow-lg`}>
-                  <div 
-                    className="w-full aspect-[4/5] bg-cover bg-center rounded bg-pink-200"
-                    style={{ backgroundImage: `url(${uploadedImg || CONFIG.PHOTOS[0]?.url || ''})` }}
+                  
+                  {/* 🔥 FIX FOR iOS: Replaced background-image div with a real img tag */}
+                  <img 
+                    src={uploadedImg || CONFIG.PHOTOS[0]?.url || ''} 
+                    crossOrigin="anonymous"
+                    alt="Memory"
+                    className="w-full aspect-[4/5] object-cover rounded bg-pink-200"
                   />
+
                   {activeTheme.id === 'classic' && (
                     <p className="text-center font-serif text-gray-700 italic mt-2 px-1 text-[10px] leading-tight line-clamp-1">
-                      {"A moment to remember"}
+                      {CONFIG.PHOTOS[0]?.caption || "A moment to remember"}
                     </p>
                   )}
                 </div>

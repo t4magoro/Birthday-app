@@ -70,7 +70,14 @@ export const StoryBuilder = ({ redeemedIds, wishes }: StoryBuilderProps) => {
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) setUploadedImg(URL.createObjectURL(file));
+    if (file) {
+      // 🔥 FIX FOR iOS: Convert the image to a Base64 string instead of a Blob URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setUploadedImg(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const addSticker = (emoji: string) => {
