@@ -67,7 +67,7 @@ export const StoryCanvas = ({
                   />
                   {activeTheme.id === 'classic' && (
                     <p className="text-center font-serif text-gray-700 italic mt-2 px-1 text-[10px] leading-tight line-clamp-1">
-                      {CONFIG.PHOTOS[0]?.caption || "A moment to remember"}
+                      {"A moment to remember"}
                     </p>
                   )}
                 </div>
@@ -78,7 +78,7 @@ export const StoryCanvas = ({
             <div className="shrink-0 flex flex-col gap-3 z-10 w-full max-w-[300px]">
               {wishes.length > 0 && (
                 <div className="bg-white/70 backdrop-blur-md rounded-2xl p-3 border border-white/50 shadow-sm w-full">
-                  <p className={`text-[9px] font-bold uppercase tracking-widest mb-1.5 text-center ${activeColor.text}`}>Make a Wish ✨</p>
+                  <p className={`text-[9px] font-bold uppercase tracking-widest mb-1.5 text-center ${activeColor.text}`}>Your Birthday Wish ✨</p>
                   <div className="flex flex-col gap-1">
                     {wishes.map((wish, idx) => (
                       <p key={idx} className="text-[11px] font-serif text-gray-800 text-center italic leading-tight line-clamp-2">"{wish}"</p>
@@ -89,7 +89,7 @@ export const StoryCanvas = ({
 
               {claimedCoupons.length > 0 && (
                 <div className="bg-white/70 backdrop-blur-md rounded-2xl p-3 border border-white/50 shadow-sm w-full">
-                  <p className={`text-[9px] font-bold uppercase tracking-widest mb-1.5 text-center ${activeColor.text}`}>Gifts Claimed</p>
+                  <p className={`text-[9px] font-bold uppercase tracking-widest mb-1.5 text-center ${activeColor.text}`}>claimed Coupons</p>
                   <div className="flex flex-col gap-1.5">
                     {claimedCoupons.map(coupon => {
                       const Icon = coupon.icon;
