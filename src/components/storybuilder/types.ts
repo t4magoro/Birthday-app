@@ -30,9 +30,19 @@ export interface LoveDustItem {
   opacity: number;
 }
 
+// One layer of a soft shadow, in the same terms as a CSS box-shadow
+// (`0 ${y}px ${blur}px ${spread}px rgba(0,0,0,${alpha})`). Drawn by <SoftShadow>.
+export interface ShadowLayer {
+  y: number;
+  blur: number;
+  spread: number;
+  alpha: number;
+}
+
 export interface StoryTheme {
   id: string;
   name: string;
   frameClass: string;
-  shadow: string; // literal box-shadow, no CSS vars — safe for Safari export
+  shadow: ShadowLayer[];
+  radius: number; // px, must match the rounded-* class in frameClass
 }
