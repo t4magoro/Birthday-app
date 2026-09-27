@@ -83,14 +83,14 @@ export const MusicButton = ({ aboveConfetti }: MusicButtonProps) => {
           onClick={toggleMusic}
           aria-label={isPlaying ? 'Mute music' : 'Play music'}
           title={isPlaying ? 'Mute music' : 'Play music'}
-          className={`fixed bottom-6 left-6 z-50 bg-white text-pink-500 p-4 rounded-full shadow-2xl hover:bg-pink-50 hover:scale-110 active:scale-95 border-2 border-pink-200 print:hidden flex items-center justify-center 
-            ${aboveConfetti ? '-translate-y-18' : 'translate-y-0'
+          className={`btn-pop fixed bottom-5 left-4 z-50 w-12 h-12 bg-white text-pink-500 rounded-full print:hidden flex items-center justify-center
+            ${aboveConfetti ? '-translate-y-16' : 'translate-y-0'
           }`}
-          style={{ WebkitTapHighlightColor: 'transparent',
-            // smooth up/down slide with a little overshoot; hover & press stay quick
-            transition: 'translate 550ms cubic-bezier(0.34, 1.4, 0.64, 1), scale 200ms ease-out, background-color 300ms ease', }}
+          style={{
+            // smooth up/down slide with a little overshoot; the press squish stays quick
+            transition: 'translate 550ms cubic-bezier(0.34, 1.4, 0.64, 1), transform 120ms ease-out, box-shadow 120ms ease-out', }}
         >
-          {isPlaying ? <Volume2 className="w-6 h-6" /> : <VolumeX className="w-6 h-6" />}
+          {isPlaying ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
         </button>
       )}
     </>

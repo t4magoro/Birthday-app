@@ -1,8 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { PartyPopper } from 'lucide-react';
 
 export const ConfettiButton = () => {
   const [isFiring, setIsFiring] = useState(false);
+  const firing = useRef(false);
 
   // 1. PRE-CALCULATION (JS Optimization)
   // We generate the random math and array ONLY ONCE when the app first loads.
@@ -24,10 +25,21 @@ export const ConfettiButton = () => {
   }, []);
 
   const fireConfetti = () => {
-    if (isFiring) return;
+    if (firing.current) return;
+    firing.current = true;
     setIsFiring(true);
-    setTimeout(() => setIsFiring(false), 2500);
+    setTimeout(() => {
+      firing.current = false;
+      setIsFiring(false);
+    }, 2500);
   };
+
+  // Other parts of the page can fire it too: window.dispatchEvent(new Event('confetti'))
+  // (the gift screen and the quiz results do)
+  useEffect(() => {
+    window.addEventListener('confetti', fireConfetti);
+    return () => window.removeEventListener('confetti', fireConfetti);
+  }, []);
 
   return (
     <>
@@ -46,23 +58,23 @@ export const ConfettiButton = () => {
         }
       `}</style>
 
-      <button 
+      <button
         onClick={fireConfetti}
-        className="fixed bottom-6 left-6 z-50 bg-white text-pink-500 p-4 rounded-full shadow-2xl hover:bg-pink-50 hover:scale-110 active:scale-95 transition-all duration-300 border-2 border-pink-200 print:hidden flex items-center justify-center"
-        style={{ WebkitTapHighlightColor: 'transparent' }}
+        className="btn-pop fixed bottom-5 left-4 z-50 w-12 h-12 bg-white text-pink-500 rounded-full print:hidden flex items-center justify-center"
         title="Celebrate!"
+        aria-label="Celebrate"
       >
-        <PartyPopper className={`w-6 h-6 ${isFiring ? 'animate-bounce text-pink-300' : ''}`} />
+        <PartyPopper className={`w-5 h-5 ${isFiring ? 'animate-bounce text-pink-300' : ''}`} />
       </button>
 
       {isFiring && (
         <div className="fixed inset-0 pointer-events-none z-[100] overflow-hidden flex items-end justify-center">
           <div className="relative mb-20">
             {particles.map((p) => (
-              
+
               /* 3. RAW SVG (React Optimization) */
               /* Replacing the React Lucide Component with a raw SVG string cuts render overhead by 90% */
-              <svg 
+              <svg
                 key={p.id}
                 viewBox="0 0 24 24"
                 className={`absolute w-6 h-6 fill-current ${p.color} animate-confetti`}

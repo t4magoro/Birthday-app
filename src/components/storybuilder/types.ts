@@ -5,6 +5,7 @@ export interface StoryColor {
   text: string;
   cardText?: string;  // text inside the white cards (defaults to `text`)
   chip?: string;      // coupon row background (defaults to `class`)
+  ink: string;        // hex: outlines, "sticker" shadows, the title and the HAPPY BIRTHDAY strip
 }
 
 declare module 'twemoji';
@@ -34,8 +35,11 @@ export interface LoveDustItem {
 }
 
 // One layer of a soft shadow, in the same terms as a CSS box-shadow
-// (`0 ${y}px ${blur}px ${spread}px rgba(0,0,0,${alpha})`). Drawn by <SoftShadow>.
+// (`${x}px ${y}px ${blur}px ${spread}px rgba(0,0,0,${alpha})`). Drawn by <SoftShadow>.
+// `color` replaces the black (used for the solid candy-pop "sticker" shadows).
 export interface ShadowLayer {
+  x?: number;
+  color?: string;
   y: number;
   blur: number;
   spread: number;

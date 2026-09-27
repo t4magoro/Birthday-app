@@ -29,6 +29,7 @@ export const BackgroundDust = () => {
     }));
   };
 
+  // 20 per layer (was 50): each heart runs its own endless animation, and 150 made cheaper phones stutter
   const [dust1] = useState(() => generateDust(50));
   const [dust2] = useState(() => generateDust(50));
   const [dust3] = useState(() => generateDust(50));
@@ -39,6 +40,8 @@ export const BackgroundDust = () => {
     // 1. Update the target whenever she scrolls
     const handleScroll = () => {
       scrollState.current.target = window.scrollY;
+      // wake the loop up if it went to sleep
+      if (!requestRef.current) requestRef.current = requestAnimationFrame(updateAnimation);
     };
 
     // 2. The physics loop (Runs at 60fps on the GPU)
@@ -68,7 +71,11 @@ export const BackgroundDust = () => {
         layer3Ref.current.style.transform = `translate3d(0, ${y3}px, 0)`;
       }
 
-      // Loop to next frame
+      // Caught up with the scroll: stop looping (saves battery) until she scrolls again
+      if (Math.abs(velocity) < 0.1) {
+        requestRef.current = 0;
+        return;
+      }
       requestRef.current = requestAnimationFrame(updateAnimation);
     };
 
@@ -85,7 +92,8 @@ export const BackgroundDust = () => {
   if (!mounted) return null;
 
   return (
-    <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+    // -z-10 (not z-0) keeps the hearts BEHIND the cards instead of on top of them
+    <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
       
       <style>{`
         @keyframes dustFloat {

@@ -1,14 +1,93 @@
 @import "tailwindcss";
 
-html,
-body {
-  background-color: #FFF0F5;
+/* =========================================
+   THEME: Scrapbook + a little Candy Pop
+   ========================================= */
+@theme {
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif; /* body text */
+  --font-hand: "Caveat", cursive;                              /* handwriting: titles, letter, captions */
+  --font-pop: "Fredoka", "Nunito", sans-serif;                 /* chunky: buttons, quiz, coupons */
+  --color-ink: #6b1d45;                                        /* berry "ink": outlines + dark text */
 }
 
+/* Pink dotted scrapbook paper behind the whole site (and the gift screen) */
+html,
+body,
+.bg-paper {
+  background: #fff0f5 radial-gradient(#f6c6d9 1.2px, transparent 1.4px) 0 0 / 18px 18px;
+}
 
+@layer components {
+  /* Candy-pop button: berry outline + hard "sticker" shadow that squishes when pressed */
+  .btn-pop {
+    border: 2.5px solid var(--color-ink);
+    box-shadow: 4px 4px 0 var(--color-ink);
+    transition: transform 120ms ease-out, box-shadow 120ms ease-out, background-color 200ms, color 200ms;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-pop:active:not(:disabled) {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0 var(--color-ink);
+  }
+  @media (hover: hover) {
+    .btn-pop:hover:not(:disabled) {
+      transform: translate(-1px, -1px);
+      box-shadow: 5px 5px 0 var(--color-ink);
+    }
+  }
+
+  /* Pink washi tape. Put <span className="tape" /> inside a `relative` card */
+  .tape {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    width: 92px;
+    height: 26px;
+    translate: -50% 0;
+    rotate: -3deg;
+    background: repeating-linear-gradient(45deg, rgb(244 114 182 / 0.7) 0 8px, rgb(252 207 226 / 0.8) 8px 16px);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Postage stamp (dotted white edge = perforation) and round postmark, used as decorations */
+  .stamp {
+    display: grid;
+    place-items: center;
+    width: 58px;
+    height: 68px;
+    background: #ec4899;
+    color: #fff;
+    font-family: var(--font-hand);
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1;
+    text-align: center;
+    border: 5px dotted #fff0f5;
+    outline: 2px solid #ec4899;
+  }
+  .postmark {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border: 2px solid rgb(107 29 69 / 0.35);
+    border-radius: 9999px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: rgb(107 29 69 / 0.5);
+  }
+
+  /* Hand-drawn squiggle under a heading */
+  .squiggle {
+    padding-bottom: 14px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 14'%3E%3Cpath d='M3 9 C 30 2, 50 13, 75 7 S 120 3, 147 8' fill='none' stroke='%23ec4899' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat bottom center / 120px 12px;
+  }
+}
 
 /* =========================================
-   MOBILE OPTIMIZATIONS & ANIMATIONS
+   ANIMATIONS
    ========================================= */
 
 /* 1. Restore missing UI animations natively */
@@ -32,20 +111,56 @@ body {
 }
 
 @keyframes popIn {
-  0% {
-    opacity: 0;
-    transform: translateY(100px) scale(0.5);
-  }
-  70% {
-    opacity: 1;
-    transform: translateY(-10px) scale(1.05);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+  0% { opacity: 0; transform: translateY(100px) scale(0.5); }
+  70% { opacity: 1; transform: translateY(-10px) scale(1.05); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-pop-in {
+  animation: popIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* 3. Staggered "rise" entrance (set animation-delay inline for the stagger) */
+@keyframes rise { from { opacity: 0; translate: 0 24px; } }
+.animate-rise { animation: rise 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+
+/* 4. Candy-pop sticker wiggle */
+@keyframes wiggle {
+  0%, 100% { rotate: 8deg; }
+  50% { rotate: -5deg; scale: 1.06; }
+}
+.animate-wiggle { animation: wiggle 2.4s ease-in-out infinite; }
+
+/* 5. Wrong quiz answer shake */
+@keyframes shake {
+  0%, 100% { translate: 0; }
+  20%, 60% { translate: -8px 0; }
+  40%, 80% { translate: 8px 0; }
+}
+.animate-shake { animation: shake 0.4s ease-in-out; }
+
+/* 6. Scrolling "HAPPY BIRTHDAY" strip (the text is repeated twice, so -50% loops seamlessly) */
+@keyframes marquee { to { translate: -50% 0; } }
+.animate-marquee { animation: marquee 18s linear infinite; }
+
+/* 7. Sections gently slide in as she scrolls to them — pure CSS (scroll-driven animation).
+   Browsers that don't support it (older iPhones, Firefox) just show the content normally. */
+@keyframes reveal { from { opacity: 0; translate: 0 48px; } }
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
   }
 }
 
-.animate-pop-in {
-  animation: popIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+/* Respect the phone's "Reduce motion" setting: every animation/transition jumps straight to its end */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

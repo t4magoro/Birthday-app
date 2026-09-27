@@ -51,10 +51,10 @@ export const SoftShadow = ({ layers, radius }: SoftShadowProps) => (
           bottom: -layer.spread,
           left: -layer.spread,
           borderRadius: Math.max(0, radius + layer.spread),
-          background: `rgba(0,0,0,${layer.alpha})`,
+          background: layer.color ?? `rgba(0,0,0,${layer.alpha})`,
           // a box-shadow blur radius is two standard deviations of the Gaussian
           filter: `blur(${layer.blur / 2}px)`,
-          transform: `translateY(${layer.y}px)`,
+          transform: `translate(${layer.x ?? 0}px, ${layer.y}px)`,
         }}
       />
     ))}

@@ -30,11 +30,16 @@ export const CONFIG = {
 
   MUSIC_URL: `${import.meta.env.BASE_URL}music/birthday.mp3`,
   
-  MESSAGE_TEXT: `Happy Birthday to my favorite person in the world! 
-  Every day with you is an adventure, and I am so grateful for all the laughs, 
-  the quiet moments, and the endless love we share. I hope your day is as 
-  beautiful, sweet, and amazing as you are. Here's to many more birthdays 
-  together! I love you! ❤️`,
+  MESSAGE_TEXT: `Happy Birthday to my favorite person in the world!
+
+  Every day with you is an adventure, and I am so grateful for all the laughs,
+  the quiet moments, and the endless love we share.
+
+  I hope your day is as beautiful, sweet, and amazing as you are.
+  Here's to many more birthdays together! I love you! ❤️`,
+
+  // The sign-off at the bottom of the love letter (put your name here if you like)
+  LETTER_SIGNATURE: "Love you always ♡",
 
   PHOTOS: rawPhotos.map((photo, index) => ({
     ...photo,

@@ -34,7 +34,7 @@ export const DesignTools = ({
           <Settings2 className="w-5 h-5" />
         </div>
         <div>
-          <h2 className="text-lg font-bold font-serif text-gray-800 leading-tight">Design Story</h2>
+          <h2 className="font-hand text-3xl text-ink leading-none">Design Story</h2>
           <p className="text-[11px] font-medium text-gray-500 uppercase tracking-widest">Customize Keepsake</p>
         </div>
       </div>
@@ -49,7 +49,7 @@ export const DesignTools = ({
               <h3 className="text-[11px] font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
                 <Palette className="w-4 h-4"/> Background
               </h3>
-              <button onClick={shuffleDust} className="text-[11px] font-bold text-pink-500 hover:text-pink-600 flex items-center gap-1 transition-colors active:scale-95">
+              <button onClick={shuffleDust} className="-my-2 -mr-2 px-3 py-2 rounded-full text-xs font-bold text-pink-500 hover:text-pink-600 hover:bg-white/60 flex items-center gap-1.5 transition-colors active:scale-95">
                 <RefreshCcw className="w-3 h-3"/> Shuffle Pattern
               </button>
             </div>
@@ -72,7 +72,7 @@ export const DesignTools = ({
                 <button
                   key={theme.id}
                   onClick={() => setActiveTheme(theme)}
-                  className={`px-3 py-3 rounded-2xl text-sm font-bold transition-all ${activeTheme.id === theme.id ? 'bg-pink-500 text-white shadow-md' : 'bg-white/60 text-gray-600 hover:bg-white/80 hover:text-pink-600 shadow-sm border border-white/50'}`}
+                  className={`px-3 py-3 rounded-2xl text-sm font-bold transition-all ${activeTheme.id === theme.id ? 'btn-pop bg-pink-500 text-white' : 'bg-white/60 text-gray-600 hover:bg-white/80 hover:text-pink-600 shadow-sm border border-white/50'}`}
                 >
                   {theme.name}
                 </button>
@@ -120,7 +120,7 @@ export const DesignTools = ({
         <button
           onClick={exportStory}
           disabled={isExporting}
-          className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50 border border-pink-400"
+          className="btn-pop w-full bg-pink-500 text-white font-pop font-semibold text-lg py-4 rounded-2xl flex items-center justify-center gap-2 disabled:opacity-60"
         >
           <Download className="w-5 h-5" />
           {isExporting ? 'Saving Image...' : 'Download for Instagram'}
